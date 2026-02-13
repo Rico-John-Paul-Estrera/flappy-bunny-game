@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Glitchy Bunnies</title>
+  </head>
+
+  <body>
+    <canvas id="gameCanvas" width="400" height="600"></canvas>
+    <div id="bunnyDeskWrap">
+      <img id="bunnyBody" src="bunnies_at_desk.jpg" alt="Bunny at desk" />
+      <img id="bunnyHand" src="./bunny_right_hand.png" alt="" />
+    </div>
+
+    <!-- HDMI Cord connecting bunny desk to game monitor -->
+    <svg id="hdmiCord" xmlns="http://www.w3.org/2000/svg">
+      <path class="cable-path" id="cablePath" d="" />
+      <path class="cable-highlight" id="cableHighlight" d="" />
+    </svg>
+    <div id="hdmiTag">HDMI</div>
+
+    <!-- HDMI Plug near bunny image -->
+    <div class="hdmi-plug" id="hdmiPlugSrc">
+      <div class="hdmi-plug-cable"></div>
+      <div class="hdmi-plug-body"></div>
+      <span class="hdmi-label">HDMI</span>
+    </div>
+
+    <!-- HDMI Plug near game canvas -->
+    <div class="hdmi-plug" id="hdmiPlugDst" style="transform: rotate(180deg)">
+      <div class="hdmi-plug-cable"></div>
+      <div class="hdmi-plug-body"></div>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,137 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: #0a1628;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+}
+#gameCanvas {
+  border: 3px solid #1a3a5c;
+  border-radius: 12px;
+  box-shadow: 0 0 40px rgba(30, 80, 140, 0.5);
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+#bunnyDeskWrap {
+  position: fixed;
+  bottom: 63px;
+  left: 30px;
+  width: 400px;
+  z-index: 10;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+  border-radius: 15px;
+  overflow: hidden;
+}
+/* Base body image without hand */
+#bunnyBody {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* Separate hand image overlaid on top */
+#bunnyHand {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  transition: transform 0.07s ease-out;
+  transform-origin: center center;
+}
+#bunnyHand.pressing {
+  transform: translateY(6px) translateX(2px) rotate(3deg);
+}
+
+/* ---- HDMI Cord ---- */
+#hdmiCord {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+  overflow: visible;
+}
+#hdmiCord .cable-path {
+  fill: none;
+  stroke: #222;
+  stroke-width: 5;
+  stroke-linecap: round;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
+}
+#hdmiCord .cable-highlight {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.hdmi-plug {
+  position: fixed;
+  z-index: 6;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hdmi-plug-body {
+  width: 30px;
+  height: 14px;
+  background: linear-gradient(180deg, #444, #222);
+  border-radius: 2px;
+  border: 1px solid #555;
+  position: relative;
+}
+.hdmi-plug-body::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 7px;
+  background: #111;
+  clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%);
+  border: 1px solid #333;
+}
+.hdmi-plug-cable {
+  width: 8px;
+  height: 12px;
+  background: linear-gradient(90deg, #1a1a1a, #333, #1a1a1a);
+  border-radius: 0 0 3px 3px;
+}
+.hdmi-label {
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 10px;
+  font-weight: bold;
+  color: #888;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+/* Label floating near cord */
+#hdmiTag {
+  position: fixed;
+  z-index: 7;
+  pointer-events: none;
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  font-weight: bold;
+  color: #c8a86e;
+  letter-spacing: 3px;
+  text-shadow:
+    0 0 8px rgba(200, 168, 110, 0.5),
+    0 1px 2px rgba(0, 0, 0, 0.8);
+  transform: rotate(-15deg);
+  opacity: 0.9;
+}
