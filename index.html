@@ -3,15 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style.css" />
     <title>Glitchy Bunnies</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" type="image/x-icon" href="./assets/jpegs/bunnies_favicon.jpg">
   </head>
 
   <body>
+    <!-- Background music -->
+    <audio id="backgroundMusic" loop>
+      <source src="./assets/audio/glitch-bunnies-retro-music.mp3" type="audio/mpeg" />
+    </audio>
+
+    <!-- Game Over sound -->
+    <audio id="gameoverSound">
+      <source src="./assets/audio/gameover-sound.mp3" type="audio/mpeg" />
+    </audio>
+
+    <!-- Jump sound -->
+    <audio id="jumpSound">
+      <source src="./assets/audio/jump-sound.mp3" type="audio/mpeg" />
+    </audio>
+
     <canvas id="gameCanvas" width="400" height="600"></canvas>
     <div id="bunnyDeskWrap">
-      <img id="bunnyBody" src="bunnies_at_desk.jpg" alt="Bunny at desk" />
-      <img id="bunnyHand" src="./bunny_right_hand.png" alt="" />
+      <img id="bunnyBody" src="./assets/jpegs/bunnies_at_desk.jpg" alt="Bunny at desk" />
+      <img id="bunnyHand" src="./assets/jpegs/bunny_right_hand.png" alt="" />
     </div>
 
     <!-- HDMI Cord connecting bunny desk to game monitor -->
@@ -32,6 +48,29 @@
     <div class="hdmi-plug" id="hdmiPlugDst" style="transform: rotate(180deg)">
       <div class="hdmi-plug-cable"></div>
       <div class="hdmi-plug-body"></div>
+    </div>
+
+    <!-- Social Media Icons -->
+    <div id="socialsContainer">
+      <a href="https://x.com/404bunnies" target="_blank" rel="noopener noreferrer" class="social-icon" title="X / Twitter">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.6l-5.117-6.687-5.856 6.687H2.688l7.644-8.769L1.6 2.25h6.767l4.633 6.143L17.79 2.25h.454zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/>
+        </svg>
+      </a>
+      <a href="https://discord.com/invite/glitchybunnies" target="_blank" rel="noopener noreferrer" class="social-icon" title="Discord">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 7c-1.5-1.5-3.5-2-5.5-2L14 6.5c-2-0.5-4-0.5-6 0L7.5 5C5.5 5 3.5 5.5 2 7c-1 3-1.5 7-1 10.5 1.5 1.5 4 2 5.5 2 0 0 0.5-1 1-1.5-1.5-0.5-2.5-1-3-2 2 1 4 1.5 7.5 1.5s5.5-0.5 7.5-1.5c-0.5 1-1.5 1.5-3 2 0.5 0.5 1 1.5 1 1.5 1.5 0 4-0.5 5.5-2 0.5-3.5 0-7.5-1-10.5z"/>
+          <circle cx="9" cy="12" r="1.2" fill="currentColor"/>
+          <circle cx="15" cy="12" r="1.2" fill="currentColor"/>
+        </svg>
+      </a>
+      <a href="https://gbunnies.com/" target="_blank" rel="noopener noreferrer" class="social-icon" title="Website">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          <path d="M2 12h20"/>
+        </svg>
+      </a>
     </div>
 
     <script src="./script.js"></script>

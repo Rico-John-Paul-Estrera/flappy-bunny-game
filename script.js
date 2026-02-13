@@ -1,4 +1,72 @@
 // ============================================================
+//  BACKGROUND MUSIC
+// ============================================================
+const backgroundMusic = document.getElementById("backgroundMusic");
+const gameoverSound = document.getElementById("gameoverSound");
+const jumpSound = document.getElementById("jumpSound");
+let musicInitialized = false;
+
+// Attempt to play music on page load (may be blocked by browser)
+function playBackgroundMusic() {
+  if (backgroundMusic && !musicInitialized) {
+    backgroundMusic.volume = 1.0; // Set volume to 100%
+    const playPromise = backgroundMusic.play();
+    if (playPromise !== undefined) {
+      playPromise.catch((error) => {
+        console.log("Autoplay blocked. Music will play on first user interaction.");
+      });
+    }
+    musicInitialized = true;
+  }
+}
+
+// Stop background music and play game over sound
+function playGameOverSound() {
+  if (backgroundMusic) {
+    backgroundMusic.pause();
+  }
+  if (gameoverSound) {
+    gameoverSound.volume = 1.0;
+    gameoverSound.currentTime = 0; // Reset to start
+    gameoverSound.play().catch((error) => {
+      console.log("Game over sound playback failed:", error);
+    });
+  }
+}
+
+// Resume background music
+function resumeBackgroundMusic() {
+  if (gameoverSound) {
+    gameoverSound.pause();
+    gameoverSound.currentTime = 0;
+  }
+  if (backgroundMusic) {
+    backgroundMusic.volume = 1.0; // Ensure full volume
+    backgroundMusic.currentTime = 0; // Restart from beginning
+    backgroundMusic.play().catch((error) => {
+      console.log("Background music playback failed:", error);
+    });
+  }
+}
+
+// Play jump sound
+function playJumpSound() {
+  if (jumpSound) {
+    jumpSound.pause(); // Pause if already playing
+    jumpSound.currentTime = 0; // Reset to start
+    jumpSound.volume = 0.3; // Set volume to 40%
+    jumpSound.play().catch((error) => {
+      console.log("Jump sound playback failed:", error);
+    });
+  }
+}
+
+// Play music on first user interaction (more reliable)
+document.addEventListener("click", playBackgroundMusic, { once: true });
+document.addEventListener("keydown", playBackgroundMusic, { once: true });
+document.addEventListener("touchstart", playBackgroundMusic, { once: true });
+
+// ============================================================
 //  FLAPPY BUD BUNNY – Glitchy Edition Inspired by @404bunnies
 // ============================================================
 const canvas = document.getElementById("gameCanvas");
@@ -665,15 +733,19 @@ function triggerMash() {
 function flap() {
   triggerMash();
   if (gameState === "start") {
+    playJumpSound(); // Play sound when starting game
     gameState = "playing";
     resetGame();
     bunny.vy = FLAP_FORCE;
     spawnBubbles(bunny.x, bunny.y + 15);
+    resumeBackgroundMusic(); // Resume music when starting game
   } else if (gameState === "playing") {
+    playJumpSound(); // Play sound during gameplay
     bunny.vy = FLAP_FORCE;
     spawnBubbles(bunny.x, bunny.y + 15);
     glitchTimer = 10; // Brief glitch on flap
   } else if (gameState === "dead") {
+    // Don't play sound when dead, just restart game state
     gameState = "start";
   }
 }
@@ -730,6 +802,7 @@ function gameLoop(timestamp) {
     // Collision (trigger big glitch on death)
     if (checkCollision()) {
       gameState = "dead";
+      playGameOverSound(); // Play game over sound and stop music
       if (score > bestScore) {
         bestScore = score;
         localStorage.setItem("flappyBunnyBest", bestScore.toString());
@@ -821,7 +894,7 @@ function positionHdmiCord() {
   const srcY = bunnyRect.top + bunnyRect.height * 0.45;
 
   // Destination point: left-center of game canvas
-  const dstX = canvasRect.left + 5;
+  const dstX = canvasRect.left + -5;
   const dstY = canvasRect.top + canvasRect.height * 0.55;
 
   // Midpoint for curve control points
