@@ -20,6 +20,85 @@ body {
   position: relative;
   z-index: 1;
 }
+
+/* ---- Equal Sign ---- */
+#equalSign {
+  position: fixed;
+  z-index: 13;
+  pointer-events: none;
+  display: none;
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 100px;
+  font-weight: bold;
+  color: #0ff;
+  text-shadow:
+    0 0 10px rgba(0, 255, 255, 0.8),
+    0 0 20px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(0, 255, 255, 0.4),
+    2px 2px 0 rgba(255, 0, 255, 0.3),
+    -2px -2px 0 rgba(255, 255, 0, 0.3);
+  animation: equalSignGlitch 3s steps(2) infinite;
+  /* Will be positioned by JS between canvas and rating image */
+}
+
+@keyframes equalSignGlitch {
+  0%, 85%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+    filter: hue-rotate(0deg);
+  }
+  86% {
+    transform: translate(-3px, 2px) scale(1.02);
+    opacity: 0.9;
+    filter: hue-rotate(10deg);
+  }
+  88% {
+    transform: translate(2px, -2px) scale(0.98);
+    opacity: 0.95;
+    filter: hue-rotate(-10deg);
+  }
+  90% {
+    transform: translate(-1px, 1px) scale(1.01) skewX(-2deg);
+    opacity: 0.85;
+  }
+  92% {
+    transform: translate(1px, -1px) scale(0.99) skewX(2deg);
+    opacity: 1;
+  }
+  94% {
+    transform: translate(0, 0) scale(1) skewX(0);
+    opacity: 1;
+    filter: hue-rotate(0deg);
+  }
+}
+
+/* ---- Game Over Rating Image ---- */
+#ratingImageWrap {
+  position: fixed;
+  z-index: 13;
+  pointer-events: none;
+  display: none;
+  /* Will be positioned by JS to the right of the canvas */
+}
+#ratingImageWrap img {
+  display: none;
+  width: 220px;
+  height: auto;
+  border-radius: 12px;
+  border: 2px solid rgba(42, 90, 138, 0.6);
+  box-shadow:
+    0 0 20px rgba(30, 80, 140, 0.5),
+    0 0 40px rgba(30, 80, 140, 0.2);
+  animation: ratingFadeIn 0.5s ease-out forwards;
+}
+#ratingImageWrap img.active {
+  display: block;
+}
+@keyframes ratingFadeIn {
+  0% { opacity: 0; transform: translateY(10px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 #bunnyDeskWrap {
   position: fixed;
   bottom: 63px;
@@ -50,6 +129,336 @@ body {
 }
 #bunnyHand.pressing {
   transform: translateY(6px) translateX(2px) rotate(3deg);
+}
+
+/* ============================================================
+   RETRO-TECH SUSPENDED DISPLAY
+   ============================================================ */
+#craneWrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 12;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.3));
+}
+
+/* Make signboard interactive */
+#signTextWrap {
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.2s ease;
+}
+
+#signTextWrap:hover {
+  transform: scale(1.05);
+}
+
+#signTextWrap:active {
+  transform: scale(0.98);
+}
+
+/* --- Tech Suspension System --- */
+.crane-pendulum {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Remove: transform: translateX(-50%); */
+  transform: none;
+  /* Optionally add: */
+  margin-left: 200px;
+  transform-origin: 50% 0;
+  animation: pendulumSwing 4s ease-in-out infinite;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- Tech Cables with Neon Glow --- */
+.crane-cable {
+  width: 4px;
+  height: 40px;
+  background: linear-gradient(180deg, #0ff, #0aa);
+  margin: 0 auto;
+  border-radius: 2px;
+  box-shadow: 
+    0 0 8px rgba(0, 255, 255, 0.6),
+    0 0 12px rgba(0, 255, 255, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  position: relative;
+  animation: cableGlow 2s ease-in-out infinite;
+}
+
+@keyframes cableGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 255, 0.6), 0 0 12px rgba(0, 255, 255, 0.4); }
+  50% { box-shadow: 0 0 12px rgba(0, 255, 255, 0.8), 0 0 16px rgba(0, 255, 255, 0.6); }
+}
+
+/* --- Tech Connector Module --- */
+.crane-hook {
+  position: relative;
+  width: 40px;
+  margin-top: -2px;
+}
+.hook-body {
+  width: 24px;
+  height: 10px;
+  background: linear-gradient(180deg, #1a1a2e, #0a0a1a);
+  margin: 0 auto;
+  border: 1px solid #0ff;
+  border-radius: 2px;
+  box-shadow: 
+    0 0 8px rgba(0, 255, 255, 0.5),
+    inset 0 1px 1px rgba(0, 255, 255, 0.3);
+  position: relative;
+}
+.hook-body::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
+  background: #0ff;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.8);
+  animation: connectorPulse 1.5s ease-in-out infinite;
+}
+.hook-curve {
+  display: none;
+}
+
+@keyframes connectorPulse {
+  0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.8); }
+}
+
+/* --- Retro CRT Display --- */
+.signboard {
+  position: relative;
+  width: 200px;
+  margin-top: -2px;
+  filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.4));
+}
+
+/* Tech Frame Border */
+.sign-border {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, #1a1a2e, #0a0a1a);
+  border: 2px solid #0ff;
+  border-radius: 4px;
+  z-index: 0;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
+.sign-border::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 2px;
+}
+.sign-border::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: #0ff;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+  animation: cornerBlink 2s steps(1) infinite;
+}
+
+@keyframes cornerBlink {
+  0%, 80% { opacity: 1; }
+  85%, 95% { opacity: 0; }
+}
+
+/* CRT Screen Display */
+.sign-face {
+  position: relative;
+  margin: 8px;
+  background: radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%);
+  border-radius: 2px;
+  padding: 16px 12px;
+  z-index: 1;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 0 30px rgba(0, 255, 255, 0.15),
+    inset 0 2px 1px rgba(0, 255, 255, 0.2);
+  /* CRT scanlines and phosphor glow */
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(0, 255, 255, 0.03) 2px,
+      rgba(0, 255, 255, 0.03) 3px
+    ),
+    radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
+  animation: screenFlicker 0.15s steps(1) infinite;
+}
+
+@keyframes screenFlicker {
+  0%, 90% { opacity: 1; }
+  91%, 93% { opacity: 0.97; }
+  94%, 100% { opacity: 1; }
+}
+
+/* Tech Corner Indicators */
+.confetti {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 0;
+  opacity: 1;
+  z-index: 2;
+  animation: pixelBlink 3s steps(1) infinite;
+}
+.c1 { background: #0ff; top: 6px; left: 6px; box-shadow: 0 0 4px #0ff; }
+.c2 { background: #f0f; top: 6px; right: 6px; box-shadow: 0 0 4px #f0f; animation-delay: 0.5s; }
+.c3 { background: #0f0; bottom: 6px; left: 6px; box-shadow: 0 0 4px #0f0; animation-delay: 1s; }
+.c4 { background: #ff0; bottom: 6px; right: 6px; box-shadow: 0 0 4px #ff0; animation-delay: 1.5s; }
+.c5 { background: #0ff; top: 50%; left: 6px; box-shadow: 0 0 4px #0ff; animation-delay: 2s; }
+.c6 { background: #f0f; top: 50%; right: 6px; box-shadow: 0 0 4px #f0f; animation-delay: 2.5s; }
+.c7 { background: #0f0; top: 20px; left: 6px; box-shadow: 0 0 4px #0f0; animation-delay: 1.2s; }
+.c8 { background: #ff0; bottom: 20px; right: 6px; box-shadow: 0 0 4px #ff0; animation-delay: 0.8s; }
+
+@keyframes pixelBlink {
+  0%, 70%, 100% { opacity: 1; }
+  75%, 85% { opacity: 0.3; }
+}
+
+/* --- Glitch Text --- */
+.sign-text-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+  z-index: 3;
+}
+
+.sign-text {
+  display: block;
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-weight: 700;
+  font-size: 12px;
+  color: #0ff;
+  text-align: center;
+  letter-spacing: 2px;
+  line-height: 1.1;
+  text-transform: uppercase;
+  position: relative;
+  text-shadow: 
+    0 0 8px rgba(0, 255, 255, 0.8),
+    0 0 12px rgba(0, 255, 255, 0.5),
+    0 0 16px rgba(0, 255, 255, 0.3);
+}
+.sign-text-big {
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: #0ff;
+  text-shadow:
+    0 0 10px rgba(0, 255, 255, 0.9),
+    0 0 15px rgba(0, 255, 255, 0.6),
+    0 0 20px rgba(0, 255, 255, 0.4);
+  animation: signTextGlitch 3s steps(1) infinite;
+}
+
+/* Glitch pseudo-layers (chromatic aberration on text) */
+.sign-text::before,
+.sign-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+}
+.sign-text-big::before {
+  color: #f0f;
+  opacity: 0.7;
+  animation: glitchTextR 2.5s steps(1) infinite;
+  clip-path: inset(0 0 50% 0);
+}
+.sign-text-big::after {
+  color: #ff0;
+  opacity: 0.6;
+  animation: glitchTextB 2.8s steps(1) infinite;
+  clip-path: inset(50% 0 0 0);
+}
+
+
+
+/* ---- Text Glitch Animations ---- */
+@keyframes signTextGlitch {
+  0%, 90%, 100% { transform: translate(0, 0); opacity: 1; }
+  91% { transform: translate(-2px, 1px); opacity: 0.8; }
+  92% { transform: translate(2px, -1px); opacity: 1; }
+  93% { transform: translate(0, 0); opacity: 0.9; clip-path: inset(20% 0 40% 0); }
+  94% { transform: translate(1px, 0); opacity: 1; clip-path: inset(0); }
+  95% { transform: translate(-1px, 1px) skewX(-2deg); opacity: 0.85; }
+  96% { transform: translate(0, 0) skewX(0); opacity: 1; }
+}
+
+@keyframes glitchTextR {
+  0%, 85%, 100% { transform: translate(0, 0); opacity: 0; }
+  86% { transform: translate(-3px, -1px); opacity: 0.7; }
+  88% { transform: translate(2px, 1px); opacity: 0.5; }
+  90% { transform: translate(-1px, 0); opacity: 0.6; }
+  92% { transform: translate(0, 0); opacity: 0; }
+}
+
+@keyframes glitchTextB {
+  0%, 80%, 100% { transform: translate(0, 0); opacity: 0; }
+  81% { transform: translate(3px, 1px); opacity: 0.6; }
+  83% { transform: translate(-2px, -1px); opacity: 0.4; }
+  85% { transform: translate(1px, 0); opacity: 0.5; }
+  87% { transform: translate(0, 0); opacity: 0; }
+}
+
+/* ---- Pendulum Swing Animation ---- */
+@keyframes pendulumSwing {
+  0%   { transform: translateX(-50%) rotate(-8deg); }
+  25%  { transform: translateX(-50%) rotate(6deg); }
+  50%  { transform: translateX(-50%) rotate(-5deg); }
+  75%  { transform: translateX(-50%) rotate(4deg); }
+  100% { transform: translateX(-50%) rotate(-8deg); }
+}
+
+/* CRT Static Noise Overlay */
+.sign-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  opacity: 0.3;
+  pointer-events: none;
+  border-radius: inherit;
+  animation: staticNoise 0.08s steps(2) infinite;
+  z-index: 4;
+  mix-blend-mode: overlay;
+}
+
+@keyframes staticNoise {
+  0%   { transform: translate(0, 0); }
+  33%  { transform: translate(-1px, 1px); }
+  66%  { transform: translate(1px, -1px); }
+  100% { transform: translate(0, 0); }
 }
 
 /* ---- HDMI Cord ---- */

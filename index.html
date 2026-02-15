@@ -24,7 +24,53 @@
       <source src="./assets/audio/jump-sound.mp3" type="audio/mpeg" />
     </audio>
 
+    <!-- Ceiling-Mounted Signboard -->
+    <div id="craneWrap">
+      <!-- Signboard assembly -->
+      <div class="crane-pendulum">
+        <!-- Cable / chain -->
+        <div class="crane-cable"></div>
+        <!-- Hook -->
+        <div class="crane-hook">
+          <div class="hook-body"></div>
+          <div class="hook-curve"></div>
+        </div>
+        <!-- Signboard -->
+        <div class="signboard">
+          <!-- Hazard stripe border -->
+          <div class="sign-border"></div>
+          <!-- Inner sign area -->
+          <div class="sign-face">
+            <!-- Confetti dots -->
+            <span class="confetti c1"></span>
+            <span class="confetti c2"></span>
+            <span class="confetti c3"></span>
+            <span class="confetti c4"></span>
+            <span class="confetti c5"></span>
+            <span class="confetti c6"></span>
+            <span class="confetti c7"></span>
+            <span class="confetti c8"></span>
+            <!-- Glitch text -->
+            <div class="sign-text-wrap" id="signTextWrap">
+              <span class="sign-text sign-text-big" data-text="DON'T CLICK THIS">DON'T CLICK THIS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <canvas id="gameCanvas" width="400" height="600"></canvas>
+
+    <!-- Equal Sign (shown between game and rating image) -->
+    <div id="equalSign">=</div>
+
+    <!-- Game Over Rating Images (shown beside the game panel) -->
+    <div id="ratingImageWrap">
+      <img id="ratingHighIQ" src="./assets/jpegs/high_iq.PNG" alt="HIGH IQ (LOSER BUNNY)" />
+      <img id="ratingSmolIQ" src="./assets/jpegs/smol_iq.PNG" alt="LOW IQ (GUD BUNNY)" />
+      <img id="ratingBigD" src="./assets/jpegs/big_D.PNG" alt="BUNNY.EXE (BIG DICK)" />
+    </div>
+
     <div id="bunnyDeskWrap">
       <img id="bunnyBody" src="./assets/jpegs/bunnies_at_desk.jpg" alt="Bunny at desk" />
       <img id="bunnyHand" src="./assets/jpegs/bunny_right_hand.png" alt="" />

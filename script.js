@@ -66,11 +66,62 @@ document.addEventListener("click", playBackgroundMusic, { once: true });
 document.addEventListener("keydown", playBackgroundMusic, { once: true });
 document.addEventListener("touchstart", playBackgroundMusic, { once: true });
 
+// Signboard click handler
+const signTextWrap = document.getElementById("signTextWrap");
+if (signTextWrap) {
+  signTextWrap.addEventListener("click", (e) => {
+    e.stopPropagation();
+    window.open("https://www.youtube.com/watch?v=q-Y0bnx6Ndw&list=RDq-Y0bnx6Ndw&start_radio=1", "_blank");
+  });
+}
+
 // ============================================================
 //  FLAPPY BUD BUNNY – Glitchy Edition Inspired by @404bunnies
 // ============================================================
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+
+// ----- Rating Images -----
+const ratingImageWrap = document.getElementById("ratingImageWrap");
+const ratingHighIQ = document.getElementById("ratingHighIQ");
+const ratingSmolIQ = document.getElementById("ratingSmolIQ");
+const ratingBigD = document.getElementById("ratingBigD");
+const equalSign = document.getElementById("equalSign");
+
+function showRatingImage() {
+  // Hide all first
+  ratingHighIQ.classList.remove("active");
+  ratingSmolIQ.classList.remove("active");
+  ratingBigD.classList.remove("active");
+
+  // Show the correct one based on score
+  if (score >= 20) {
+    ratingBigD.classList.add("active");
+  } else if (score >= 10) {
+    ratingSmolIQ.classList.add("active");
+  } else {
+    ratingHighIQ.classList.add("active");
+  }
+
+  // Position to the right of the canvas
+  const canvasRect = canvas.getBoundingClientRect();
+  ratingImageWrap.style.left = (canvasRect.right + 190) + "px";
+  ratingImageWrap.style.top = (canvasRect.top + canvasRect.height / 2 - 110) + "px";
+  ratingImageWrap.style.display = "block";
+  
+  // Show and position the equal sign between canvas and rating image
+  equalSign.style.left = (canvasRect.right + 65) + "px";
+  equalSign.style.top = (canvasRect.top + canvasRect.height / 2 - 30) + "px";
+  equalSign.style.display = "block";
+}
+
+function hideRatingImage() {
+  ratingImageWrap.style.display = "none";
+  equalSign.style.display = "none";
+  ratingHighIQ.classList.remove("active");
+  ratingSmolIQ.classList.remove("active");
+  ratingBigD.classList.remove("active");
+}
 
 // ----- Constants -----
 const W = canvas.width;
@@ -78,9 +129,24 @@ const H = canvas.height;
 const GRAVITY = 0.12;
 const FLAP_FORCE = -4.2;
 const PIPE_WIDTH = 60;
-const PIPE_GAP = 220;
-const PIPE_SPEED = 0.8;
-const PIPE_INTERVAL = 2800; // ms
+const PIPE_GAP_BASE = 160; // Reduced from 220 for more challenge
+const PIPE_SPEED_BASE = 0.8;
+const PIPE_INTERVAL_BASE = 2800; // ms
+
+// Calculate dynamic pipe speed and interval based on score
+function getPipeSpeed() {
+  return PIPE_SPEED_BASE + (score * 0.02); // Increases by 0.02 per point
+}
+
+function getPipeInterval() {
+  return Math.max(1800, PIPE_INTERVAL_BASE - (score * 15)); // Spawns faster, min 1800ms
+}
+
+// Get current pipe gap (slightly decreases as game progresses)
+function getPipeGap() {
+  const gapReduction = Math.floor(score / 5) * 5; // Reduce by 5 every 5 points
+  return Math.max(120, PIPE_GAP_BASE - gapReduction); // Min gap of 120
+}
 
 // ----- Game State -----
 let bunny, pipes, score, bestScore, gameState, pipeTimer, frameId;
@@ -447,7 +513,7 @@ function drawBackground() {
 // ============================================================
 function drawPipe(pipe) {
   const topH = pipe.topHeight;
-  const bottomY = topH + PIPE_GAP;
+  const bottomY = topH + pipe.gap; // Use stored gap from pipe
 
   // Top pillar (gradient with glitch lines)
   const tGrad = ctx.createLinearGradient(pipe.x, 0, pipe.x + PIPE_WIDTH, 0);
@@ -595,7 +661,7 @@ function drawStartScreen() {
   // Subtitle
   ctx.font = '16px "Segoe UI", Arial, sans-serif';
   ctx.fillStyle = "rgba(180, 210, 240, 0.8)";
-  ctx.fillText("~ Things Are About To Get Weird ~", W / 2, 130); // Inspo from posts
+  ctx.fillText("~ Things Are About To Get Bunnifected ~", W / 2, 130); // Inspo from posts
 
   // Draw bunny preview (bobbing with glitch)
   const bobY = Math.sin(Date.now() * 0.003) * 10;
@@ -671,10 +737,33 @@ function drawGameOver() {
 
   // Restart prompt (weird inspo)
   ctx.font = '16px "Segoe UI", Arial, sans-serif';
-  ctx.fillStyle = "#fff";
   const pulse = 0.5 + Math.sin(Date.now() * 0.005) * 0.5;
   ctx.globalAlpha = 0.5 + pulse * 0.5;
-  ctx.fillText("Click or Space to retry... or get weird", W / 2, H / 2 + 100);
+  
+  // Draw the full prompt first in white (centered)
+  const fullPrompt = "Click or Space to retry... or become";
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#fff";
+  ctx.fillText(fullPrompt, W / 2, H / 2 + 100);
+  
+  // Now overlay just the "GAY" part in rainbow colors
+  const beforeGAY = "Click or Space to retry... or become ";
+  const rainbowColors = ["#e40303", "#ffed00", "#004dff"]; // Red, Yellow, Blue
+  
+  // Calculate positions for left-aligned text
+  ctx.textAlign = "left";
+  const fullWidth = ctx.measureText(fullPrompt).width;
+  const beforeWidth = ctx.measureText(beforeGAY).width;
+  const leftEdge = W / 2 - fullWidth / 2;
+  let currentX = leftEdge + beforeWidth;
+  
+  const gayLetters = "GAY";
+  for (let i = 0; i < gayLetters.length; i++) {
+    ctx.fillStyle = rainbowColors[i];
+    ctx.fillText(gayLetters[i], currentX, H / 2 + 100);
+    currentX += ctx.measureText(gayLetters[i]).width;
+  }
+  
   ctx.globalAlpha = 1;
 
   ctx.restore();
@@ -694,7 +783,7 @@ function checkCollision() {
   // Pipes
   for (const pipe of pipes) {
     const topH = pipe.topHeight;
-    const bottomY = topH + PIPE_GAP;
+    const bottomY = topH + pipe.gap; // Use stored gap from pipe
 
     // Horizontal overlap
     if (bx + br > pipe.x - 5 && bx - br < pipe.x + PIPE_WIDTH + 5) {
@@ -746,6 +835,7 @@ function flap() {
     glitchTimer = 10; // Brief glitch on flap
   } else if (gameState === "dead") {
     // Don't play sound when dead, just restart game state
+    hideRatingImage(); // Hide the rating image
     gameState = "start";
   }
 }
@@ -764,14 +854,16 @@ function gameLoop(timestamp) {
   if (gameState === "playing") {
     // Spawn pipes
     pipeTimer += dt;
-    if (pipeTimer >= PIPE_INTERVAL) {
+    if (pipeTimer >= getPipeInterval()) {
       pipeTimer = 0;
       const minTop = 60;
-      const maxTop = H - PIPE_GAP - 80;
+      const currentGap = getPipeGap();
+      const maxTop = H - currentGap - 80;
       pipes.push({
         x: W,
         topHeight: rand(minTop, maxTop),
         scored: false,
+        gap: currentGap, // Store the gap for this pipe
       });
     }
 
@@ -782,7 +874,7 @@ function gameLoop(timestamp) {
 
     // Update pipes
     for (let i = pipes.length - 1; i >= 0; i--) {
-      pipes[i].x -= PIPE_SPEED;
+      pipes[i].x -= getPipeSpeed();
 
       // Score
       if (!pipes[i].scored && pipes[i].x + PIPE_WIDTH < bunny.x) {
@@ -803,6 +895,7 @@ function gameLoop(timestamp) {
     if (checkCollision()) {
       gameState = "dead";
       playGameOverSound(); // Play game over sound and stop music
+      showRatingImage(); // Show the rating image beside the game panel
       if (score > bestScore) {
         bestScore = score;
         localStorage.setItem("flappyBunnyBest", bestScore.toString());
